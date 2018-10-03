@@ -11,7 +11,7 @@ To compile and install source package you will need:
   - installed CUPS libraries (libcups, libcupsimage)
   
 To compile sources run follow commands from the package directory:
-./configure
+./configure --enable-samples
 make
 
 To install compiled binaries and data files use command (you have to have root privileges):
