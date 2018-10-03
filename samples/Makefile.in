@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# $Id: Makefile.in 8487 2009-05-22 22:03:27Z vbuzuev $
+# $Id: Makefile.am 8487 2009-05-22 22:03:27Z vbuzuev $
 
 # DYMO LabelWriter Drivers
 # Copyright (C) 2008 Sanford L.P.
@@ -113,6 +113,7 @@ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
+PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 SET_MAKE = @SET_MAKE@
@@ -163,6 +164,7 @@ sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
+top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = paper_bounds paper_list test_label custom_paper custom_paper_tape
@@ -473,7 +475,7 @@ uninstall-am:
 
 
 #
-#  $Id: Makefile.in 8487 2009-05-22 22:03:27Z vbuzuev $
+#  $Id: Makefile.am 8487 2009-05-22 22:03:27Z vbuzuev $
 #
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

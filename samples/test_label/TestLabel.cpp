@@ -9,7 +9,7 @@
 
 using namespace std;
 
-const char* PNGFileName = "label.png";
+const char* PNGFileName = "/home/architect/dymo-cups-drivers/samples/test_label/label.png";
 
 class Error: public exception
 {
@@ -54,7 +54,7 @@ FindPapers(ppd_group_t* group, int num_groups)
 
 
 void
-CreateLabelImage(int Width, int Height)
+CreateLabelImage(int Width, int Height, char * name, char * email)
 {
   CairoSurfacePtr Surface(cairo_image_surface_create(CAIRO_FORMAT_RGB24, Width, Height));
   if (!*Surface)
@@ -79,8 +79,9 @@ CreateLabelImage(int Width, int Height)
   cairo_stroke(c);
 
   // load an image from the file
+  // this is QR
   cairo_save(c);
-  CairoSurfacePtr Image(cairo_image_surface_create_from_png("tel.png"));
+  CairoSurfacePtr Image(cairo_image_surface_create_from_png("/home/architect/dymo-cups-drivers/samples/test_label/tel.png"));
   if (!*Image)
     throw Error("Unable to load image file");
 
@@ -95,10 +96,10 @@ CreateLabelImage(int Width, int Height)
   cairo_set_source_rgb(c, 0, 0, 0);
   cairo_set_line_width(c, 1);
   const char* lines[4] = {
-    "Jim Best",
-    "Good, Bedder, and Best",
-    "900 Park Ave",
-    "New York, NY 10021-0231" };
+    name,
+    "HackRU Fall 2018",
+    "Hacker",
+    email };
 
   cairo_text_extents_t te;
   double x = 250;
@@ -116,20 +117,21 @@ CreateLabelImage(int Width, int Height)
   }
 
   // draw horiz line
-  cairo_set_line_width(c, 5);
-  cairo_move_to(c, 30, 200);
-  cairo_line_to(c, 1080, 200);
-  cairo_stroke(c);
+  //cairo_set_line_width(c, 5);
+  //cairo_move_to(c, 30, 200);
+  //cairo_line_to(c, 1080, 200);
+  //cairo_stroke(c);
+  //or not
 
-  // draw barcode - load from fle also
+  // draw barcode - load from file also
   cairo_save(c);
-  CairoSurfacePtr Barcode(cairo_image_surface_create_from_png("barcode.png"));
-  if (!*Barcode)
-    throw Error("Unable to load barcode file");
+  //CairoSurfacePtr Barcode(cairo_image_surface_create_from_png("barcode.png"));
+  //if (!*Barcode)
+  //  throw Error("Unable to load barcode file");
 
-  cairo_set_source_surface(c, Barcode, 30, 230);
-  cairo_paint(c);
-  cairo_restore(c);
+  //cairo_set_source_surface(c, Barcode, 30, 230);
+  //cairo_paint(c);
+//  cairo_restore(c);
 
   
   // draw address 2
@@ -138,10 +140,10 @@ CreateLabelImage(int Width, int Height)
   cairo_set_source_rgb(c, 0, 0, 0);
   cairo_set_line_width(c, 1);
   const char* lines2[4] = {
-    "Dr. Robert J. Block",
-    "Alta Mira Hospital",
-    "200 Madison Ave",
-    "Montgomery, AL 36104-3626" };
+    "WiFi:",
+    "RUWireless",
+    "User: something",
+    "Password: other thing" };
 
   x = 30;
   y = 320;
@@ -157,13 +159,14 @@ CreateLabelImage(int Width, int Height)
   }
 
   // draw a photo
+  // this is the logo
   cairo_save(c);
-  CairoSurfacePtr Photo(cairo_image_surface_create_from_png("photo.png"));
+  CairoSurfacePtr Photo(cairo_image_surface_create_from_png("/home/architect/dymo-cups-drivers/samples/test_label/photo.png"));
   if (!*Photo)
     throw Error("Unable to load photo file");
 
-  //cairo_scale(c, 0.5, 0.5);
-  cairo_set_source_surface(c, Photo, 850, 330);
+  cairo_scale(c, 0.5, 0.5);
+  cairo_set_source_surface(c, Photo, 1050, 330);
   cairo_paint(c);
   cairo_restore(c);
   
@@ -173,7 +176,7 @@ CreateLabelImage(int Width, int Height)
   cairo_set_source_rgb(c, 0, 0, 0);
   cairo_set_line_width(c, 1);
     cairo_move_to(c, 30, 640);
-    cairo_show_text(c, "Printed on Linux using DYMO CUPS drivers and Cairo graphics library");
+    cairo_show_text(c, "Printed on Linux using DYMO CUPS drivers and Cairo graphics library - by HackRU RnD");
     cairo_stroke(c);
   
   
@@ -186,21 +189,22 @@ int main(int argc, char** argv)
 {
   try
   {
-    if (argc < 2)
-      throw Error("Usage: test_label <PrinterName>");
+    if (argc < 4)
+      throw Error("Usage: test_label <PrinterName> <Hacker Name> <Hacker Email>");
 
 
-    printf("Please Insert '30256 Shipping' paper. Press 'c' to continue, 'a' to abort: ");
-    int ch = 0;
-    ch = getchar();
+    //printf("Please Insert '30256 Shipping' paper. Press 'c' to continue, 'a' to abort: ");
+    //int ch = 0;
+    //ch = getchar();
 
-    if (ch == 'a')
-      return 0;
+    //if (ch == 'a')
+    //  return 0;
 
     int Width = 1112;
     int Height = 664;
     
-    CreateLabelImage(Width, Height);
+    CreateLabelImage(Width, Height, argv[2], argv[3]);
+    if (argc == 5) return 0;
 
     int             num_options = 0;
     cups_option_t*  options = NULL;
