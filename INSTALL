@@ -30,4 +30,9 @@ $ cups_datadir='/usr/local/share/cups' cups_serverbindir='/usr/local/lib/cups' .
 
 Default directories for CUPS are '/usr/share/cups' and '/usr/lib/cups'
 
+2. Automake and CUPS need be built from source.
 
+This project needs automake-1.10 which can be found online on GNU's FTP somewhere.
+
+This project needs CUPS-1.4 or older. There is a Github with this release and you
+should be able to build it without a hitch.
