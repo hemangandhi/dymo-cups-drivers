@@ -54,7 +54,7 @@ FindPapers(ppd_group_t* group, int num_groups)
 
 
 void
-CreateLabelImage(int Width, int Height, char * name, char * email)
+CreateLabelImage(int Width, int Height, char * name, char * email, char * role)
 {
   CairoSurfacePtr Surface(cairo_image_surface_create(CAIRO_FORMAT_RGB24, Width, Height));
   if (!*Surface)
@@ -98,7 +98,7 @@ CreateLabelImage(int Width, int Height, char * name, char * email)
   const char* lines[4] = {
     name,
     "HackRU Fall 2018",
-    "Hacker",
+    role,
     email };
 
   cairo_text_extents_t te;
@@ -190,7 +190,7 @@ int main(int argc, char** argv)
   try
   {
     if (argc < 4)
-      throw Error("Usage: test_label <PrinterName> <Hacker Name> <Hacker Email>");
+      throw Error("Usage: test_label <PrinterName> <Hacker Name> <Hacker Email> <role='Hacker'> <don't print flag>");
 
 
     //printf("Please Insert '30256 Shipping' paper. Press 'c' to continue, 'a' to abort: ");
@@ -203,8 +203,11 @@ int main(int argc, char** argv)
     int Width = 1112;
     int Height = 664;
     
-    CreateLabelImage(Width, Height, argv[2], argv[3]);
-    if (argc == 5) return 0;
+    char * role = "Hacker";
+    if(argc >= 5) role = argv[4];
+
+    CreateLabelImage(Width, Height, argv[2], argv[3], role);
+    if (argc == 6) return 0;
 
     int             num_options = 0;
     cups_option_t*  options = NULL;
