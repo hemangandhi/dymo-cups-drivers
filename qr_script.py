@@ -13,9 +13,10 @@ from flask import Flask, render_template, request, redirect, jsonify
 app = Flask(__name__)
 
 SAMPLE_CODE_BASE_PATH = '/home/architect/dymo-cups-drivers/samples/test_label/'
-PHOTO_PATH = SAMPLE_CODE_BASE_PATH + 'tel.png'
-LABEL_PHOTO_PATH = SAMPLE_CODE_BASE_PATH + 'label-{}.png'
 PRINTER_CMD = SAMPLE_CODE_BASE_PATH + 'TestLabel'
+
+QR_PHOTO_PATH = '/tmp/qr-{}.png'
+LABEL_PHOTO_PATH = '/tmp/label-{}.png'
 
 LCS_URL = 'https://m7cwj1fy7c.execute-api.us-west-2.amazonaws.com/mlhtest/read'
 
@@ -45,6 +46,7 @@ def web_req():
         return 'Need email and name to print.', 400
 
     if 'name' not in data:
+        # need an auth token to get names, XD
         q = {
             'query': {'email': data['email']},
             'email': 'c@c.com',
@@ -61,7 +63,9 @@ def web_req():
         name = data['name']
 
     role = data.get('role', 'Hacker')
-    print_proc = run_printer([PRINTER_CMD, 'labels', name, data['email'], role, LABEL_PHOTO_PATH.format(data['email'])], data['email'], PHOTO_PATH)
+    qr = QR_PHOTO_PATH.format(data['email'])
+    pc = [PRINTER_CMD, 'labels', name, data['email'], role, LABEL_PHOTO_PATH.format(data['email']), qr]
+    print_proc = run_printer(pc, data['email'], qr)
     if print_proc != 0:
         return 'Check cupcake... there might be trouble', 500
     return 'Success'

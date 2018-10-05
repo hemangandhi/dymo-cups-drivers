@@ -10,6 +10,7 @@
 using namespace std;
 
 char* PNGFileName = "/home/architect/dymo-cups-drivers/samples/test_label/label.png";
+char* QRFileName = "/home/architect/dymo-cups-drivers/samples/test_label/tel.png";
 
 class Error: public exception
 {
@@ -81,7 +82,7 @@ CreateLabelImage(int Width, int Height, char * name, char * email, char * role)
   // load an image from the file
   // this is QR
   cairo_save(c);
-  CairoSurfacePtr Image(cairo_image_surface_create_from_png("/home/architect/dymo-cups-drivers/samples/test_label/tel.png"));
+  CairoSurfacePtr Image(cairo_image_surface_create_from_png(QRFileName));
   if (!*Image)
     throw Error("Unable to load image file");
 
@@ -92,23 +93,23 @@ CreateLabelImage(int Width, int Height, char * name, char * email, char * role)
 
   // draw text
   cairo_select_font_face(c, "courier", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
-  cairo_set_font_size(c, 50);
+  cairo_set_font_size(c, 25);
   cairo_set_source_rgb(c, 0, 0, 0);
   cairo_set_line_width(c, 1);
   const char* lines[4] = {
-    name,
-    "HackRU Fall 2018",
     role,
+    "HackRU Fall 2018",
+    name,
     email };
 
   cairo_text_extents_t te;
-  double x = 250;
+  double x = 50;
   double y = 50;
   for(int i = 0; i < 4; ++i)
   {
     cairo_text_extents(c, lines[i], &te);
 
-    x = 1080 - te.width;
+    x = 550 - te.width;
     cairo_move_to(c, x, y);
     cairo_show_text(c, lines[i]);
     cairo_stroke(c);
@@ -136,19 +137,17 @@ CreateLabelImage(int Width, int Height, char * name, char * email, char * role)
   
   // draw address 2
   cairo_select_font_face(c, "sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-  cairo_set_font_size(c, 50);
+  cairo_set_font_size(c, 15);
   cairo_set_source_rgb(c, 0, 0, 0);
   cairo_set_line_width(c, 1);
-  const char* lines2[5] = {
-    "WiFi: RUWireless",
-    "Use Guest Access",
+  const char* lines2[3] = {
+    "WiFi: RUWireless - use guest access if not Rutgers student",
     "Slack: http://bit.ly/2fhkLJc",
-    "Dashboard:",
-    "http://hackru.org/dashboard.html" };
+    "Dashboard: http://hackru.org/dashboard.html" };
 
   x = 30;
-  y = 320;
-  for(int i = 0; i < 5; ++i)
+  y = 170;
+  for(int i = 0; i < 3; ++i)
   {
     cairo_text_extents(c, lines2[i], &te);
 
@@ -191,7 +190,7 @@ int main(int argc, char** argv)
   try
   {
     if (argc < 4)
-      throw Error("Usage: test_label <PrinterName> <Hacker Name> <Hacker Email> <role='Hacker'> <PNG File name (does not print if not provided)>");
+      throw Error("Usage: test_label <PrinterName> <Hacker Name> <Hacker Email> <role='Hacker'> <PNG File name (does not print if not provided)> <QR File name>");
 
 
     //printf("Please Insert '30256 Shipping' paper. Press 'c' to continue, 'a' to abort: ");
@@ -201,14 +200,16 @@ int main(int argc, char** argv)
     //if (ch == 'a')
     //  return 0;
 
-    int Width = 1112;
-    int Height = 664;
+    //2.5 x 1 in labels
+    int Width = 590;
+    int Height = 256;
     
     char * role = "Hacker";
     if(argc >= 5) role = argv[4];
 
-    if (argc == 6) {
+    if (argc == 7) {
       PNGFileName = argv[5];
+      QRFileName = argv[6];
       CreateLabelImage(Width, Height, argv[2], argv[3], role);
     }else{
       CreateLabelImage(Width, Height, argv[2], argv[3], role);
@@ -218,7 +219,7 @@ int main(int argc, char** argv)
     int             num_options = 0;
     cups_option_t*  options = NULL;
 
-    num_options = cupsAddOption("PageSize", "w167h288", num_options, &options);
+    num_options = cupsAddOption("PageSize", "w72h154", num_options, &options);
     num_options = cupsAddOption("scaling", "100", num_options, &options);
     num_options = cupsAddOption("landscape", "yes", num_options, &options);
     num_options = cupsAddOption("DymoHalftoning", "ErrorDiffusion", num_options, &options);
