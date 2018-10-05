@@ -98,9 +98,9 @@ CreateLabelImage(int Width, int Height, char * name, char * email, char * role)
   cairo_set_line_width(c, 1);
   const char* lines[4] = {
     role,
-    "HackRU Fall 2018",
     name,
-    email };
+    "HackRU Fall 2018",
+    "hackru.org" };
 
   cairo_text_extents_t te;
   double x = 50;
@@ -137,17 +137,16 @@ CreateLabelImage(int Width, int Height, char * name, char * email, char * role)
   
   // draw address 2
   cairo_select_font_face(c, "sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-  cairo_set_font_size(c, 15);
+  cairo_set_font_size(c, 25);
   cairo_set_source_rgb(c, 0, 0, 0);
   cairo_set_line_width(c, 1);
-  const char* lines2[3] = {
-    "WiFi: RUWireless - use guest access if not Rutgers student",
-    "Slack: http://bit.ly/2fhkLJc",
-    "Dashboard: http://hackru.org/dashboard.html" };
+  const char* lines2[2] = {
+    "Slack: http://bit.ly/hackru-f18",
+    email };
 
   x = 30;
-  y = 170;
-  for(int i = 0; i < 3; ++i)
+  y = 200;
+  for(int i = 0; i < 2; ++i)
   {
     cairo_text_extents(c, lines2[i], &te);
 
