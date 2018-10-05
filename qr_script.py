@@ -14,6 +14,7 @@ app = Flask(__name__)
 
 SAMPLE_CODE_BASE_PATH = '/home/architect/dymo-cups-drivers/samples/test_label/'
 PHOTO_PATH = SAMPLE_CODE_BASE_PATH + 'tel.png'
+LABEL_PHOTO_PATH = SAMPLE_CODE_BASE_PATH + 'label-{}.png'
 PRINTER_CMD = SAMPLE_CODE_BASE_PATH + 'TestLabel'
 
 LCS_URL = 'https://m7cwj1fy7c.execute-api.us-west-2.amazonaws.com/mlhtest/read'
@@ -60,7 +61,7 @@ def web_req():
         name = data['name']
 
     role = data.get('role', 'Hacker')
-    print_proc = run_printer([PRINTER_CMD, 'labels', name, data['email'], role], data['email'], PHOTO_PATH)
+    print_proc = run_printer([PRINTER_CMD, 'labels', name, data['email'], role, LABEL_PHOTO_PATH.format(data['email'])], data['email'], PHOTO_PATH)
     if print_proc != 0:
         return 'Check cupcake... there might be trouble', 500
     return 'Success'

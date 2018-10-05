@@ -9,7 +9,7 @@
 
 using namespace std;
 
-const char* PNGFileName = "/home/architect/dymo-cups-drivers/samples/test_label/label.png";
+char* PNGFileName = "/home/architect/dymo-cups-drivers/samples/test_label/label.png";
 
 class Error: public exception
 {
@@ -139,15 +139,16 @@ CreateLabelImage(int Width, int Height, char * name, char * email, char * role)
   cairo_set_font_size(c, 50);
   cairo_set_source_rgb(c, 0, 0, 0);
   cairo_set_line_width(c, 1);
-  const char* lines2[4] = {
-    "WiFi:",
-    "RUWireless",
-    "User: something",
-    "Password: other thing" };
+  const char* lines2[5] = {
+    "WiFi: RUWireless",
+    "Use Guest Access",
+    "Slack: http://bit.ly/2fhkLJc",
+    "Dashboard:",
+    "http://hackru.org/dashboard.html" };
 
   x = 30;
   y = 320;
-  for(int i = 0; i < 4; ++i)
+  for(int i = 0; i < 5; ++i)
   {
     cairo_text_extents(c, lines2[i], &te);
 
@@ -155,7 +156,7 @@ CreateLabelImage(int Width, int Height, char * name, char * email, char * role)
     cairo_show_text(c, lines2[i]);
     cairo_stroke(c);
 
-    y += te.height;
+    y += te.height + 5;
   }
 
   // draw a photo
@@ -166,7 +167,7 @@ CreateLabelImage(int Width, int Height, char * name, char * email, char * role)
     throw Error("Unable to load photo file");
 
   cairo_scale(c, 0.5, 0.5);
-  cairo_set_source_surface(c, Photo, 1050, 330);
+  cairo_set_source_surface(c, Photo, 1280, 330);
   cairo_paint(c);
   cairo_restore(c);
   
@@ -190,7 +191,7 @@ int main(int argc, char** argv)
   try
   {
     if (argc < 4)
-      throw Error("Usage: test_label <PrinterName> <Hacker Name> <Hacker Email> <role='Hacker'> <don't print flag>");
+      throw Error("Usage: test_label <PrinterName> <Hacker Name> <Hacker Email> <role='Hacker'> <PNG File name (does not print if not provided)>");
 
 
     //printf("Please Insert '30256 Shipping' paper. Press 'c' to continue, 'a' to abort: ");
@@ -206,8 +207,13 @@ int main(int argc, char** argv)
     char * role = "Hacker";
     if(argc >= 5) role = argv[4];
 
-    CreateLabelImage(Width, Height, argv[2], argv[3], role);
-    if (argc == 6) return 0;
+    if (argc == 6) {
+      PNGFileName = argv[5];
+      CreateLabelImage(Width, Height, argv[2], argv[3], role);
+    }else{
+      CreateLabelImage(Width, Height, argv[2], argv[3], role);
+      return 0;
+    }
 
     int             num_options = 0;
     cups_option_t*  options = NULL;

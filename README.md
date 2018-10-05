@@ -19,7 +19,7 @@ lpr -o PageSize=Address_Label -o CutOptions=ChainMarks -o LabelAlignment=Right -
 1) Go to samples/test_labels.
 2) Edit TestLabel.cpp
 3) `make` (in the directory)
-4) `./TestLabel <printer name> <email> <name> <opt = "">` where if the opt is passed,
+4) `./TestLabel <printer name> <email> <name> <role> <PNG file if you want to print, else defaults to outputting a png>` where if the opt is passed,
    the printer is not run.
 5) Open label.png if you did not run the printer.
 
@@ -29,3 +29,4 @@ lpr -o PageSize=Address_Label -o CutOptions=ChainMarks -o LabelAlignment=Right -
 2) CUPS 1.5 or later has deprecated the PPD API, so this driver currently does not work there.
    You have to install it from source.
 3) You have to build automake-1.10 from source to build this.
+4) I'm too lazy for argument validation, so pass all the args to `TestLabel` for now.
