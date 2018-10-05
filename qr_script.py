@@ -16,7 +16,7 @@ SAMPLE_CODE_BASE_PATH = '/home/architect/dymo-cups-drivers/samples/test_label/'
 PHOTO_PATH = SAMPLE_CODE_BASE_PATH + 'tel.png'
 PRINTER_CMD = SAMPLE_CODE_BASE_PATH + 'TestLabel'
 
-LCS_URL = ''
+LCS_URL = 'https://m7cwj1fy7c.execute-api.us-west-2.amazonaws.com/mlhtest/read'
 
 def email2qr(email):
     #construct the QR code
@@ -39,28 +39,31 @@ def run_printer(p_exec, email, qr_path):
 
 @app.route('/print', methods=['POST'])
 def web_req():
-    data = request.json()
+    data = request.json
     if 'email' not in data:
-        return 400, 'Need email and name to print.'
+        return 'Need email and name to print.', 400
 
     if 'name' not in data:
-        r = requests.post(LCS_URL, json={'query': {'email': data['email']}})
+        q = {
+            'query': {'email': data['email']},
+            'email': 'c@c.com',
+            'token': '791277e1-7b8b-4873-95ac-d283c3bacd84'
+        }
+        r = req.post(LCS_URL, json=q)
         rj = r.json()
         try:
-            name = rj['body'][0]['first_name'] + rj['body'][0]['last_name']
+            name = rj['body'][0]['first_name'] + ' ' + rj['body'][0]['last_name']
         except:
             print(rj)
-            return 400, 'User not found or something... check cupcake'
+            return 'User not found or something... check cupcake', 400
     else:
         name = data['name']
 
     role = data.get('role', 'Hacker')
-    print_proc = run_printer([PRINTER_CMD, 'labels', name, email, role], email, PHOTO_PATH)
+    print_proc = run_printer([PRINTER_CMD, 'labels', name, data['email'], role], data['email'], PHOTO_PATH)
     if print_proc != 0:
-        return 500, 'Check cupcake... there might be trouble'
-    return 200, 'Success'
+        return 'Check cupcake... there might be trouble', 500
+    return 'Success'
 
 if __name__ == '__main__':
-    email = sys.argv[1] if len(sys.argv) >= 2 else 'rnd@hackru.org'
-    name = sys.argv[2] if len(sys.argv) >= 3 else 'Ms. Cupcake'
-    print(run_printer([PRINTER_CMD, 'labels', name, email], email, PHOTO_PATH))
+    app.run(port=5000)
