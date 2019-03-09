@@ -12,8 +12,8 @@ from flask import Flask, render_template, request, redirect, jsonify
 
 app = Flask(__name__)
 
-SAMPLE_CODE_BASE_PATH = '/home/architect/dymo-cups-drivers/samples/test_label/'
-PRINTER_CMD = SAMPLE_CODE_BASE_PATH + 'TestLabel'
+SAMPLE_CODE_BASE_PATH = '/home/maek/prog/dymo-cups-drivers/samples/test_label/'
+PRINTER_CMD = SAMPLE_CODE_BASE_PATH + 'a.out'
 
 QR_PHOTO_PATH = '/tmp/qr-{}.png'
 LABEL_PHOTO_PATH = '/tmp/label-{}.png'
@@ -40,6 +40,7 @@ def run_printer(p_exec, email, qr_path):
     return pr.returncode
 
 @app.route('/print', methods=['POST'])
+@app.route('/print/', methods=['POST'])
 def web_req():
     data = request.json
     if 'email' not in data:
@@ -49,8 +50,8 @@ def web_req():
         # need an auth token to get names, XD
         q = {
             'query': {'email': data['email']},
-            'email': 'c@c.com',
-            'token': '791277e1-7b8b-4873-95ac-d283c3bacd84'
+            'email': 'kabirkuriyan@gmail.com',
+            'token': '168008c6-c109-4da3-9c35-28b82e1c326d'
         }
         r = req.post(LCS_URL, json=q)
         rj = r.json()

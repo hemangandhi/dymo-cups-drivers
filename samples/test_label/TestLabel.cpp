@@ -9,8 +9,8 @@
 
 using namespace std;
 
-char* PNGFileName = "/home/architect/dymo-cups-drivers/samples/test_label/label.png";
-char* QRFileName = "/home/architect/dymo-cups-drivers/samples/test_label/tel.png";
+char* PNGFileName = "/home/maek/prog/dymo-cups-drivers/samples/test_label/label.png";
+char* QRFileName = "/home/maek/prog/dymo-cups-drivers/samples/test_label/tel.png";
 
 class Error: public exception
 {
@@ -99,8 +99,8 @@ CreateLabelImage(int Width, int Height, char * name, char * email, char * role)
   const char* lines[4] = {
     role,
     name,
-    "HackRU Fall 2018",
-    "hackru.org" };
+    "HackRU Fall 2019",
+    "hackru.org/live" };
 
   cairo_text_extents_t te;
   double x = 50;
@@ -141,7 +141,7 @@ CreateLabelImage(int Width, int Height, char * name, char * email, char * role)
   cairo_set_source_rgb(c, 0, 0, 0);
   cairo_set_line_width(c, 1);
   const char* lines2[2] = {
-    "Slack: http://bit.ly/hackru-f18",
+    "Slack: https://bit.ly/hackru-s19",
     email };
 
   x = 30;
